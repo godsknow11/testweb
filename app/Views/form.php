@@ -11,10 +11,12 @@ if (isset($data)) {
     // $fname = '';
     // $lname = '';
     // $email = '';
+    $event = "update";
 } else {
     $fname = '';
     $lname = '';
     $email = '';
+    $event = "insert";
 }
 
 
@@ -61,69 +63,67 @@ if (isset($data)) {
 
 </body>
 <script>
-    $("#emp_from").submit(function(e) {
-        e.preventDefault()
+$("#emp_from").submit(function(e) {
+    e.preventDefault()
 
-        var firstname = $('#fname').val();
-        var lastname = $('#lname').val();
-        var email = $('#email').val();
+    var firstname = $('#fname').val();
+    var lastname = $('#lname').val();
+    var email = $('#email').val();
+    var id = '<?php echo $_GET['id'] ?>';
+    var event = '<?php echo $event ?>';
+    if (event == "update") {
+        $.ajax({
+            type: "POST",
+            url: "<?php echo esc(base_url('ajax')); ?>",
+            data: {
+                process: 'update_employeesdata',
+                id: id,
+                lastName: lastname,
+                firstName: firstname,
+                email: email,
+            },
+            dataType: "JSON"
+        }).done(function(data) {
+            console.log(data);
+            if (data.status == true) {
+                alert('อัพเดทข้อมูลสำเร็จ !')
+                location.href = "<?php echo esc(base_url('Home/test')); ?>";
 
-        // console.log(firstname);
-        // console.log(lastname);
-        // console.log(email);
-        if (<?php echo $_GET['id'] ?> != '') {
-            $.ajax({
-                type: "POST",
-                url: "<?php echo esc(base_url('ajax')); ?>",
-                data: {
-                    process: 'update_employeesdata',
-                    id: <?php echo $_GET['id'] ?>,
-                    lastName: lastname,
-                    firstName: firstname,
-                    email: email,
-                },
-                dataType: "JSON"
-            }).done(function(data) {
-                console.log(data);
-                if (data.status == true) {
-                    alert('อัพเดทข้อมูลสำเร็จ !')
-                    location.href = "<?php echo esc(base_url('Home/test')); ?>";
-
-                } else {
-                    alert('อัพเดทข้อมูลล้มเหลว !')
-                }
-            }).fail(function() {
+            } else {
                 alert('อัพเดทข้อมูลล้มเหลว !')
-            })
+            }
+        }).fail(function() {
+            alert('อัพเดทข้อมูลล้มเหลว !')
+        })
 
-        } else {
-            $.ajax({
-                type: "POST",
-                url: "<?php echo esc(base_url('ajax')); ?>",
-                data: {
-                    process: 'insert_employeesdata',
-                    lastName: lastname,
-                    firstName: firstname,
-                    email: email,
-                },
-                dataType: "JSON"
-            }).done(function(data) {
-                console.log(data);
-                if (data.status == true) {
-                    alert('เพิ่มข้อมูลสำเร็จ !')
-                    location.href = "<?php echo esc(base_url('Home/test')); ?>";
+    } else {
+        $.ajax({
+            type: "POST",
+            url: "<?php echo esc(base_url('ajax')); ?>",
+            data: {
+                process: 'insert_employeesdata',
+                lastName: lastname,
+                firstName: firstname,
+                email: email,
+            },
+            dataType: "JSON"
+        }).done(function(data) {
+            console.log(data);
+            if (data.status == true) {
+                alert('เพิ่มข้อมูลสำเร็จ !')
+                location.href = "<?php echo esc(base_url('Home/test')); ?>";
 
-                } else {
-                    alert('เพิ่มข้อมูลล้มเหลว !')
-                }
-            }).fail(function() {
+            } else {
                 alert('เพิ่มข้อมูลล้มเหลว !')
-            })
+            }
+        }).fail(function() {
+            alert('เพิ่มข้อมูลล้มเหลว !')
+        })
 
-        }
+    }
 
 
-    })
+})
 </script>
 
 

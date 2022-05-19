@@ -69,7 +69,7 @@ class Home extends BaseController
                 $last_emp_decode = json_decode(json_encode($last_emp[0]), true);
 
                 $data = [
-                    'employeeNumber' => $last_emp_decode['employeeNumber'] + 1,
+                    'employeeNumber' => intval($last_emp_decode['employeeNumber']) + 1,
                     'lastName' => $this->request->getPost('lastName'),
                     'firstName' => $this->request->getPost('firstName'),
                     'email' => $this->request->getPost('email'),
@@ -193,6 +193,11 @@ class Home extends BaseController
     }
     public function test_order()
     {
+        // $mol_emp = new Mol_employees();
+        // $last_emp = $mol_emp->select_last_employeesnumber();
+        // $last_emp_decode = json_decode(json_encode($last_emp[0]), true);
+
+        // var_dump($last_emp_decode);
 
         // $arrData['orderNumber'] = 10100;
         // $mol_ord = new Mol_order();
